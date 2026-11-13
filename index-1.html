@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Coupon Hub | Find Deals, Save More</title>
+  <meta name="description" content="Find hand-picked shopping coupons and discount codes at Coupon Hub. Search deals for fashion, beauty, home, kids and more.">
+  <meta name="robots" content="index,follow">
+  <meta name="theme-color" content="#ec4899">
+  <link rel="canonical" href="https://YOUR-DOMAIN-HERE/">
+  <style>
+    :root{--pink:#ec4899;--deep:#be185d;--pale:#fdf2f8;--ink:#241321;--muted:#725d6b;--line:#f3d7e6}
+    *{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:#fffafd}
+    header{background:linear-gradient(120deg,#fce7f3,#fff);padding:22px max(5%,calc((100% - 1120px)/2));border-bottom:1px solid var(--line)}
+    .brand{font-size:28px;font-weight:900;color:var(--deep);letter-spacing:-1px}.brand span{color:var(--ink)}
+    .tag{color:var(--muted);margin:7px 0 0}
+    main{max-width:1120px;margin:0 auto;padding:28px 18px 60px}
+    .hero{background:linear-gradient(135deg,#fbcfe8,#fdf2f8 65%,#fff);border-radius:24px;padding:32px 24px;text-align:center}
+    h1{font-size:clamp(30px,5vw,46px);margin:0 0 10px}.hero p{color:#68485b;line-height:1.5;margin:0 auto 20px;max-width:620px}
+    .search{display:flex;max-width:620px;margin:auto;background:white;border:1px solid #e9b8d1;border-radius:14px;padding:6px;gap:6px}
+    .search input{flex:1;min-width:0;border:0;outline:0;padding:12px;font-size:16px}.search button,.btn{border:0;border-radius:10px;background:var(--deep);color:white;padding:12px 18px;font-weight:700;cursor:pointer}
+    .section-head{display:flex;justify-content:space-between;align-items:end;gap:12px;margin:30px 0 16px}.section-head h2{margin:0;font-size:24px}.section-head p{margin:0;color:var(--muted);font-size:14px}
+    .filters{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px}.chip{border:1px solid var(--line);background:white;border-radius:99px;padding:9px 14px;color:#743653;cursor:pointer}.chip.active{background:var(--deep);color:white;border-color:var(--deep)}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(245px,1fr));gap:16px}
+    .coupon{background:white;border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 5px 18px #8b24500c;display:flex;flex-direction:column;min-height:220px}
+    .coupon-top{display:flex;justify-content:space-between;align-items:center;gap:8px}.category{font-size:12px;color:var(--deep);background:var(--pale);padding:6px 9px;border-radius:99px}
+    .discount{font-weight:900;color:var(--deep);font-size:25px;margin:15px 0 5px}.coupon h3{font-size:17px;margin:0 0 8px}.coupon p{font-size:14px;color:var(--muted);line-height:1.45;margin:0 0 15px}
+    .code-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:auto;border:1px dashed #e9a8c8;border-radius:10px;padding:9px 10px;background:#fff8fc}
+    .code{font-weight:800;letter-spacing:1px;overflow-wrap:anywhere}.copy{background:#fce7f3;color:var(--deep);border:0;border-radius:8px;padding:8px 10px;font-weight:700;cursor:pointer}
+    .empty{display:none;text-align:center;color:var(--muted);padding:35px}.info{margin-top:30px;padding:20px;border-radius:16px;background:#fff;border:1px solid var(--line);color:var(--muted);font-size:13px;line-height:1.6}
+    footer{text-align:center;padding:22px;color:var(--muted);border-top:1px solid var(--line);font-size:13px}
+    @media(max-width:520px){.search{flex-direction:column}.search button{width:100%}.section-head{align-items:start;flex-direction:column}}
+  </style>
+</head>
+<body>
+<header><div class="brand">Coupon <span>Hub</span> 💗</div><p class="tag">Find a deal. Copy a code. Save more.</p></header>
+<main>
+  <section class="hero">
+    <h1>Big savings start here!</h1>
+    <p>Browse hand-picked coupon codes for fashion, beauty, home, accessories and more. Search for a deal and copy the code to use at checkout.</p>
+    <div class="search"><input id="search" type="search" placeholder="Search coupons, stores or categories…" aria-label="Search coupons"><button id="searchBtn">Find coupons</button></div>
+  </section>
+  <div class="section-head"><div><h2>Latest coupon codes</h2><p>Check each offer's terms before checkout.</p></div></div>
+  <nav class="filters" aria-label="Coupon categories">
+    <button class="chip active" data-filter="all">All deals</button><button class="chip" data-filter="Fashion">Fashion</button><button class="chip" data-filter="Bags & Shoes">Bags & Shoes</button><button class="chip" data-filter="Beauty">Beauty</button><button class="chip" data-filter="Home">Home</button><button class="chip" data-filter="Kids">Kids</button><button class="chip" data-filter="Technology">Technology</button>
+  </nav>
+  <section class="grid" id="coupons" aria-live="polite"></section>
+  <div class="empty" id="empty">No matching coupons found. Try another search.</div>
+  <section class="info"><strong>How to use a coupon:</strong> Copy the code, visit the retailer's website or app, add eligible items to your cart, and enter the code at checkout. Discounts, eligibility, expiration dates and availability are controlled by the retailer and may change without notice. Coupon Hub does not guarantee that every code will work for every account or order. Some links may be affiliate links; if so, Coupon Hub may earn a commission at no extra cost to you.</section>
+</main>
+<footer>© <span id="year"></span> Coupon Hub · Deals are subject to retailer terms.</footer>
+<script>
+const deals = [
+ {title:"Existing customer offer",category:"Fashion",discount:"60% OFF",code:"JJ454GR",desc:"Discount code for eligible existing customers."},
+ {title:"New customer offer",category:"Fashion",discount:"60% OFF",code:"7TJCH",desc:"Discount code for eligible new customers."},
+ {title:"Women’s clothing",category:"Fashion",discount:"60% OFF",code:"6RQ55H2",desc:"Save on selected women’s clothing."},
+ {title:"Bags & shoes",category:"Bags & Shoes",discount:"90% OFF",code:"4ED5354",desc:"Offer on selected bags and shoes."},
+ {title:"Men’s top picks",category:"Fashion",discount:"60% OFF",code:"652X524",desc:"Discount on selected men’s styles."},
+ {title:"Hot picks",category:"Fashion",discount:"60% OFF",code:"665LBE5",desc:"Discount on selected popular items."},
+ {title:"Accessories",category:"Bags & Shoes",discount:"90% OFF + coupon",code:"9CPNJ",desc:"Offer on selected accessories."},
+ {title:"Sleepwear & panties",category:"Fashion",discount:"60% OFF",code:"RYQP5JT",desc:"Discount on selected sleepwear and underwear."},
+ {title:"Makeup & beauty",category:"Beauty",discount:"60% OFF",code:"Z582G94",desc:"Save on selected beauty products."},
+ {title:"Kitchen & dining",category:"Home",discount:"60% OFF",code:"P665M38",desc:"Discount on selected kitchen and dining items."},
+ {title:"Hair",category:"Beauty",discount:"40% OFF",code:"2522MWW",desc:"Offer on selected hair products."},
+ {title:"Swimwear",category:"Fashion",discount:"90% OFF",code:"AVJG2",desc:"Discount on selected swimwear."},
+ {title:"Denim",category:"Fashion",discount:"80% OFF",code:"W2F3SQ6",desc:"Offer on selected denim styles."},
+ {title:"Kids & babies",category:"Kids",discount:"60% OFF",code:"M3YQ3QV",desc:"Discount on selected kids and baby items."},
+ {title:"Technology",category:"Technology",discount:"60% OFF",code:"473B4V2",desc:"Offer on selected technology items."}
+];
+const grid=document.getElementById('coupons'), empty=document.getElementById('empty'), search=document.getElementById('search');
+let filter='all';
+function render(){
+ const q=search.value.trim().toLowerCase();
+ const shown=deals.filter(d=>(filter==='all'||d.category===filter)&&[d.title,d.category,d.discount,d.code,d.desc].join(' ').toLowerCase().includes(q));
+ grid.innerHTML=shown.map((d,i)=>`<article class="coupon"><div class="coupon-top"><span class="category">${d.category}</span><span aria-hidden="true">💗</span></div><div class="discount">${d.discount}</div><h3>${d.title}</h3><p>${d.desc}</p><div class="code-row"><span class="code">${d.code}</span><button class="copy" data-code="${d.code}">Copy code</button></div></article>`).join('');
+ empty.style.display=shown.length?'none':'block';
+ grid.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(b.dataset.code);b.textContent='Copied!';}catch(e){b.textContent=b.dataset.code;}setTimeout(()=>b.textContent='Copy code',1500)}));
+}
+document.querySelectorAll('.chip').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));b.classList.add('active');filter=b.dataset.filter;render()}));
+search.addEventListener('input',render);document.getElementById('searchBtn').addEventListener('click',render);
+document.getElementById('year').textContent=new Date().getFullYear();render();
+</script>
+</body>
+</html>
